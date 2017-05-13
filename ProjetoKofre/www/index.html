@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>Aplicação de Tarefas</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="stylesheet" type="text/css" href="lib/appframework/icons.css" />
+    <link rel="stylesheet" type="text/css" href="lib/appframework/af.ui.css" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
+
+    <script type="text/javascript" charset="utf-8" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="lib/fastclick.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="lib/appframework/appframework.ui.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        
+    <script src='cordova.js'></script>
+
+</head>
+
+<body>
+    
+    
+   
+    
+
+    
+    <div id="splashscreen" class='ui-loader heavy'>
+        App Framework
+        <br>
+        <br>
+        <span class='ui-icon ui-icon-loading spin'></span>
+        <h1>Iniciando app</h1>
+    </div>
+
+    <div class="view splitview">
+        
+        <header>
+            <a class="menuButton" data-left-menu="left" data-transition="cover" style="float:left"></a>
+            <h1>Aplicação Kofre</h1>
+        </header>
+        
+        <div class="pages">
+            <div style="background-color:white">
+                        
+                <!-- Tela de Listagem -->                        
+                <div class="panel" id="inicio" data-title="Atividades" data-selected="true">
+                        <div data-role="content">
+                            <ul data-role="listview" id="atividades">
+                                <p id="semErros" style="display:none;">Nenhuma Atividade Cadastrada!</p>
+                            </ul>
+                        </div>                                  
+                </div>
+       
+            <!-- Tela Cadastro de Tarefas -->            
+            <div class="panel" id="cadastroTarefa" data-title="Cadastrar Tarefas">
+                        <div data-role="content">
+                            <div class="Form-Tarefa">
+                                <form id="form-tarefas">
+                                    <input id="Nome" />
+                                    <input type="button" value="Incluir" id="IncluirTarefas" />
+                                </form>
+                            </div>
+                       </div>        
+            </div>
+            
+            <div class="panel" id="tarefas" data-title="Tarefas">                        
+                    <a href="#cadastroTarefa" data-role="button" class="ui-btn-right homeBtn" data-transition="slideup">Incluir</a>                   
+            </div>
+          </div>
+        </div>
+            
+        <nav id="left">
+            <div class="view active">
+                <header>
+                    <h1>Menu</h1>
+                </header>
+                <div class="pages">
+                    <div class="panel active" id="navPage1" data-title="Foobar">
+                        <ul class="list">
+                            <li><a href="#inicio" onclick="$.afui.clearHistory()">Início</a></li>
+                            <li><a href="#cadastroTarefa" onclick="$.afui.clearHistory()">Cadastrar Tarefas</a></li>
+                            <li><a href="#tarefas" onclick="$.afui.clearHistory()">Tarefas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+</body>
+
+</html>

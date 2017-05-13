@@ -1,0 +1,117 @@
+version: "2"
+services:
+  console_web:
+    build:
+      context: ./apache
+      dockerfile: Dockerfile
+    hostname: kofre
+    dns:
+      - 192.168.0.48
+      - 8.8.8.8
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+#      - "9000:9000"
+    links:
+      - mysql:srvsql.interno.ntopus.com.br
+      - mongo:srvnosql.interno.ntopus.com.br
+      - redis:srvcache.interno.ntopus.com.br
+      - rabbitmq:srvqueue.interno.ntopus.com.br
+      - elasticsearch:srvsearch.interno.ntopus.com.br
+      #- srvproxy.interno.ntopus.com.br:proxy
+      - hub:testacceptance.dev.ntopus.com.br
+    extra_hosts:
+      - "kofre.localhost.home:127.0.2.1"
+      - "dev.kofre.localhost.home:127.0.2.1"
+      - "www.kofre.localhost.home:127.0.2.1"
+      - "backend.kofre.localhost.home:127.0.2.2"
+      - "frontend.kofre.localhost.home:127.0.2.3"
+      - "api.kofre.localhost.home:127.0.2.4"
+      - "srvmap.interno.ntopus.com.br:192.168.30.90"
+    volumes:
+      #- ./nginx/www:/var/www
+      #- ./nginx/sites:/etc/nginx/conf.d
+      #- ./nginx/sites-available:/etc/nginx/sites-available
+      #- ./nginx/logs:/var/log/supervisor
+      - ./apache/logs:/var/log/supervisor
+      - ./apache/sites-available:/etc/apache2/sites-available
+      - ./apache/www:/var/www
+      - ./project:/opt/project
+      - ~/.ssh:/root/.ssh
+      - ~/.composer:/root/.composer
+      - ~/.ssh:/home/docker/.ssh
+      - ~/.composer:/home/docker/.composer
+
+  mysql:
+    image: percona
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: milofre90
+      MYSQL_USER: tetra_track_user
+      MYSQL_PASSWORD: milofre90
+      MYSQL_DATABASE: tetra_track
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/tools:/opt/tools
+
+  mongo:
+    image: percona/percona-server-mongodb:3.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo/data:/data/db
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data
+
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: misere
+      RABBITMQ_DEFAULT_PASS: 'EWr#ww87g@WRi3r2%wQxKg4'
+      RABBITMQ_DEFAULT_VHOST: /
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq/mnesia
+      - ./rabbitmq/tools:/opt/tools
+
+  hub:
+    container_name: hub
+    image: selenium/hub
+    ports:
+      - "4444:4444"
+  firefox:
+    image: selenium/node-firefox
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=hub
+      - HUB_PORT_4444_TCP_PORT=4444
+    links:
+      - console_web:www.kofre.localhost.home
+  chrome:
+    image: selenium/node-chrome
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=hub
+      - HUB_PORT_4444_TCP_PORT=4444
+    links:
+      - console_web:www.kofre.localhost.home
+  #phantomjs:
+    #image: selenium/node-phantomjs
+    #environment:
+      #- HUB_PORT_4444_TCP_ADDR=hub
+      #- HUB_PORT_4444_TCP_PORT=4444
